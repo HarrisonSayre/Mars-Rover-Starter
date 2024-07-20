@@ -11,12 +11,11 @@ class Rover {
       transmissionLog["results"] = [];
       for(let i = 0; i < message.commands.length; i++){
          if(message.commands[i].commandType === "MOVE"){
-            if(this.mode === "NORMAL"){
-            //Add in check for low power mode and return false and don't move if so.
-               transmissionLog.results.push({"completed": true});
-               this.position = (message.commands[i].value);
-            }else if (this.mode === "LOW_POWER"){
+            if(this.mode === "LOW_POWER" || typeof(message.commands[i].value) != "number"){
                transmissionLog.results.push({"completed": false});
+            }else if(this.mode === "NORMAL"){
+               transmissionLog.results.push({"completed": true});
+               this.position = message.commands[i].value;
             }
          }else if(message.commands[i].commandType === "MODE_CHANGE"){
             if(message.commands[i].value == "NORMAL" || message.commands[i].value === "LOW_POWER"){

@@ -20,10 +20,9 @@ describe("Rover class", function() {
   //8
   it("response returned by receiveMessage contains the name of the message", function() {
     let testRover = new Rover(1);
-    testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", 2))]));
     expect((testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", 2))]))).message).toBe("NAME");
   });
-  //9 WRONG!!!! RESULTS NEED TO BE *RESULTS/RESOLVED* NOT JUST THE COMMANDS THEMSELVES PUT IN AN ARRAY. TEST ITSELF IS CORRECT THOUGH
+  //9
   it("response returned by receiveMessage includes two results if two commands are sent in the message", function() {
     let testRover = new Rover(1);
     expect((testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", 2)), (new Command ("MODE_CHANGE", "NORMAL"))])).results.length)).toBe(2);
@@ -35,10 +34,12 @@ describe("Rover class", function() {
     expect(testRover.receiveMessage(new Message ("NAME", [(new Command ("STATUS_CHECK"))])).results[0].roverStatus.generatorWatts).toBe(testRover.generatorWatts);
     expect(testRover.receiveMessage(new Message ("NAME", [(new Command ("STATUS_CHECK"))])).results[0].roverStatus.position).toBe(testRover.position);
   });
-  //11. MAYBE EXPAND TO INCLUDIE TESTS FOR OTHER TWO MODES?
+  //11
   it("responds correctly to the mode change command", function() {
     let testRover = new Rover(1);
     expect(testRover.receiveMessage(new Message ("NAME", [(new Command ("MODE_CHANGE", "LOW_POWER"))])).results[0].completed).toBe(true);
+    expect(testRover.receiveMessage(new Message ("NAME", [(new Command ("MODE_CHANGE", "NORMAL"))])).results[0].completed).toBe(true);
+    expect(testRover.receiveMessage(new Message ("NAME", [(new Command ("MODE_CHANGE", "WHOOPS"))])).results[0].completed).toBe(false);
   });
   //12
   it("responds with a false completed value when attempting to move in LOW_POWER mode", function() {
@@ -50,6 +51,8 @@ describe("Rover class", function() {
   it("responds with the position for the move command", function() {
     let testRover = new Rover(1);
     testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", 2))]));
+    expect(testRover.position).toBe(2);
+    testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", "3"))]));
     expect(testRover.position).toBe(2);
   });
 });
