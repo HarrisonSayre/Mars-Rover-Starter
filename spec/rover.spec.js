@@ -52,7 +52,7 @@ describe("Rover class", function() {
     let testRover = new Rover(1);
     testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", 2))]));
     expect(testRover.position).toBe(2);
-    testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", "3"))]));
+    testRover.receiveMessage(new Message ("NAME", [(new Command ("MOVE", "4"))]));
     expect(testRover.position).toBe(2);
   });
 });
